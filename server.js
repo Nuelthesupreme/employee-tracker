@@ -7,7 +7,7 @@ const ctn = sql.createConnection({
     port: 3306,
     database: "employee_tracker",
     user: "root",
-    password: "1Godthefather+",
+    password: "",
 });
 ctn.connect();
 
