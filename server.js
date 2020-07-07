@@ -8,6 +8,7 @@ const ctn = sql.createConnection({
     database: "employee_tracker",
     user: "root",
     password: "",
+    multipleStatements: true,
 });
 ctn.connect();
 
