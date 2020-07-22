@@ -6,7 +6,7 @@ const dbOptions = {
   port: 3306,
   database: "employee_tracker",
   user: "root",
-  password: "password",
+  password: "1Godthefather+",
   multipleStatements: true,
 };
 
@@ -188,7 +188,7 @@ const init = async () => {
   if (action === "employeesByManager") {
     const queryManagers = `
     SELECT employee.id, employee.first_name, employee.last_name FROM employee
-    INNER JOIN (SELECT DISTINCT(manager_id) FROM company_db.employee WHERE manager_id IS NOT NULL) as manager
+    INNER JOIN (SELECT DISTINCT(manager_id) FROM employee_tracker.employee WHERE manager_id IS NOT NULL) as manager
     on employee.id = manager.manager_id
     `;
 
@@ -309,7 +309,7 @@ const init = async () => {
     const queryRoles = "SELECT * FROM role";
     const queryManagers = `
     SELECT employee.id, employee.first_name, employee.last_name FROM employee
-    INNER JOIN (SELECT DISTINCT(manager_id) FROM company_db.employee WHERE manager_id IS NOT NULL) as manager
+    INNER JOIN (SELECT DISTINCT(manager_id) FROM employee_tracker.employee WHERE manager_id IS NOT NULL) as manager
     on employee.id = manager.manager_id
     `;
 
@@ -425,6 +425,142 @@ const init = async () => {
     connection.query(allEmployeesQuery, onAllEmployeesQuery);
   }
 
+  if (action === "updateRole") {
+    const queryEmployees = "SELECT * FROM employee";
+
+    const onQueryEmployees = async (err, employees) => {
+      if (err) throw err;
+
+      const employeeChoices = employees.map((employee) => {
+        return {
+          name: `${employee.first_name} ${employee.last_name}`,
+          value: employee.id,
+          short: `${employee.first_name} ${employee.last_name}`,
+        };
+      });
+
+      const questions = [
+        {
+          message: "Select an employee:",
+          name: "employeeId",
+          type: "list",
+          choices: employeeChoices,
+        },
+      ];
+
+      const { employeeId } = await inquirer.prompt(questions);
+
+      const queryRoles = "SELECT * FROM role";
+
+      const onQueryRoles = async (err, roles) => {
+        if (err) throw err;
+
+        const roleChoices = roles.map((role) => {
+          return {
+            name: role.title,
+            value: role.id,
+            short: role.title,
+          };
+        });
+
+        const questions = [
+          {
+            message: "Select a Role:",
+            name: "roleId",
+            type: "list",
+            choices: roleChoices,
+          },
+        ];
+
+        const { roleId } = await inquirer.prompt(questions);
+
+        const queryUpdateRole = `UPDATE employee SET role_id=${roleId} WHERE id=${employeeId}`;
+
+        const onQueryUpdateRole = () => {
+          if (err) throw err;
+          console.log("Successfully updated role ID");
+          init();
+        };
+
+        connection.query(queryUpdateRole, onQueryUpdateRole);
+      };
+
+      connection.query(queryRoles, onQueryRoles);
+    };
+
+    connection.query(queryEmployees, onQueryEmployees);
+  }
+
+  if (action === "updateManager") {
+    const queryEmployees = "SELECT * FROM employee";
+
+    const onQueryEmployees = async (err, employees) => {
+      if (err) throw err;
+
+      const employeeChoices = employees.map((employee) => {
+        return {
+          name: `${employee.first_name} ${employee.last_name}`,
+          value: employee.id,
+          short: `${employee.first_name} ${employee.last_name}`,
+        };
+      });
+
+      const questions = [
+        {
+          message: "Select an employee:",
+          name: "employeeId",
+          type: "list",
+          choices: employeeChoices,
+        },
+      ];
+
+      const { employeeId } = await inquirer.prompt(questions);
+
+      const queryManagers = `
+      SELECT employee.id, employee.first_name, employee.last_name FROM employee
+      INNER JOIN (SELECT DISTINCT(manager_id) FROM employee_tracker.employee WHERE manager_id IS NOT NULL) as manager
+      on employee.id = manager.manager_id
+      `;
+
+      const onQueryManagers = async (err, managers) => {
+        if (err) throw err;
+
+        const managerChoices = managers.map((manager) => {
+          return {
+            name: `${manager.first_name} ${manager.last_name}`,
+            value: manager.id,
+            short: `${manager.first_name} ${manager.last_name}`,
+          };
+        });
+
+        const questions = [
+          {
+            message: "Select a manager:",
+            name: "managerId",
+            type: "list",
+            choices: managerChoices,
+          },
+        ];
+
+        const { managerId } = await inquirer.prompt(questions);
+
+        const queryUpdateManager = `UPDATE employee SET manager_id=${managerId} WHERE id=${employeeId}`;
+
+        const onQueryUpdateManager = () => {
+          if (err) throw err;
+          console.log("Successfully updated manager ID");
+          init();
+        };
+
+        connection.query(queryUpdateManager, onQueryUpdateManager);
+      };
+
+      connection.query(queryManagers, onQueryManagers);
+    };
+
+    connection.query(queryEmployees, onQueryEmployees);
+  }
+
   if (action === "end") {
     process.exit();
   }
@@ -437,3 +573,4 @@ const onConnect = () => {
 };
 
 connection.connect(onConnect);
+
