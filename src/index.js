@@ -6,7 +6,7 @@ const dbOptions = {
   port: 3306,
   database: "employee_tracker",
   user: "root",
-  password: "1Godthefather+",
+  password: "",
   multipleStatements: true,
 };
 
