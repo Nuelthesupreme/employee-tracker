@@ -1,5 +1,5 @@
 ### Homework Employee Tracker using MySQL
-## Requirements
+## For this project i'm using
 MySQL
 
 Inquirer
@@ -8,25 +8,12 @@ Console.table
 
 Command line application that allows:
 
-## to add 
-departments, roles, employees
-view departments, roles, employees,
-update employee roles
-Bonus
 
-update empployee managers
-view employees by manager
-delete departments, roles, employees
-view the total utilized budget of a department (combined salary of all employees in that department)
-Try classes
+# Instillation
+To ensure the tracker operates, the user will need to run npm install to make sure the necessary modules are installed (mysql and inquirer). The user will also have to make sure the database is up and running to allow access and the credentials within the "connection" variable (in the app.js file) is correct. Once everything is set up simply enter "npm run start" in the terminal to start the tracker
 
-Department Class
-Role Class
-Employee Class
-To Do
-Use Async Await
-Use Middleware
-Testing Classes
+# Usage
+When running the application within the terminal, make sure to follow the steps displayed. When the application is run, the user will be presented with a list of different actionable commands (see image 1) that the they will be able to scroll through.
 
 ## Done
 Set up folder structure
@@ -37,3 +24,23 @@ Installed node
 Test created a database using MySQL Workbench
 Added a seed.sql database
 Got it to render from database
+
+# Employee Tracker Database
+This node command line interface (CLI) allows users to access a sql database to edit and bring up lists of employee and their information based on selected criteria, similar to a content management system (CMS). This is done through inquirer for the CMS interface with a connection through MySQL to perform CRUD functionalities (create, read, update, and delete)
+
+# commands include:
+
+View all employees - 
+View employees by department 
+View employees by role
+View employees by manager 
+a department -
+Add employee - 
+Add department - 
+Add role - 
+Remove employee - 
+Remove role - 
+Remove department -
+Update employee role - 
+Update employee manager -
+End application -
